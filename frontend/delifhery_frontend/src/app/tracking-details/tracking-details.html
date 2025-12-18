@@ -81,6 +81,35 @@
               <div class="summary-v">{{ lastUpdate }}</div>
             </div>
           </div>
+
+          <div class="divider"></div>
+
+          <div class="toggle-row">
+            <div class="toggle-text">
+              <div class="toggle-title">Notifications</div>
+              <div class="toggle-sub">
+                @if (isLoggedIn) {
+                  {{ subscribed ? 'Enabled' : 'Disabled' }}
+                } @else {
+                  Login required
+                }
+              </div>
+            </div>
+
+            <label class="switch" [class.switch-disabled]="!isLoggedIn || toggleLoading">
+              <input
+                type="checkbox"
+                [checked]="subscribed"
+                [disabled]="!isLoggedIn || toggleLoading"
+                (change)="onToggleNotifications()"
+              />
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+
+          @if (toggleError) {
+            <div class="toggle-error">{{ toggleError }}</div>
+          }
         </section>
 
         <section class="card">

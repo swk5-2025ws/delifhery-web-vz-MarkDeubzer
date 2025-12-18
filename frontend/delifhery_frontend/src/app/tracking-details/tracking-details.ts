@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {TrackingService, TrackingStatusResponse} from '../../services/tracking.service';
 import {CommonModule} from '@angular/common';
 import {ActivatedRoute, RouterLink} from '@angular/router';
+import {KeycloakService} from 'keycloak-angular';
+import {NotificationService} from '../../services/notification.service';
 
 @Component({
   selector: 'app-tracking-details',
@@ -18,10 +20,17 @@ export class TrackingDetails implements OnInit{
   postalCode = "";
 
   data: TrackingStatusResponse | null = null;
-  constructor(private trackingService: TrackingService, private route: ActivatedRoute) {
+
+  isLoggedIn: boolean = false;
+  subscribed: boolean = false;
+  toggleLoading: boolean = false;
+  toggleError: string | null = null;
+
+  constructor(private trackingService: TrackingService, private route: ActivatedRoute
+  , private keycloak: KeycloakService, private notificationService: NotificationService) {
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.postalCode = (this.route.snapshot.paramMap.get('postalCode') ?? '').trim();
     this.trackingNumber = (this.route.snapshot.queryParamMap.get('tn') ?? '').trim();
 
@@ -29,6 +38,7 @@ export class TrackingDetails implements OnInit{
       this.error = "Missing tracking number or postal code. Try again later";
       return;
     }
+    this.isLoggedIn = this.keycloak.isLoggedIn();
 
     this.load();
   }
@@ -45,6 +55,12 @@ export class TrackingDetails implements OnInit{
       next:(res) => {
         this.data = res;
         this.loading = false;
+
+        if (this.isLoggedIn) {
+          this.loadSubscriptionStatus();
+        } else {
+          this.subscribed = false;
+        }
       },
       error: (err) => {
         this.loading = false;
@@ -52,6 +68,54 @@ export class TrackingDetails implements OnInit{
       }
     });
   }
+
+  private loadSubscriptionStatus(): void{
+    this.toggleError = null;
+    this.toggleLoading = true;
+    this.toggleError = null;
+
+    this.notificationService
+      .getStatus(this.trackingNumber,this.postalCode)
+      .subscribe({
+        next: (result) => {
+          this.subscribed = !!result?.subscribed;
+          this.toggleLoading = false;
+        },
+        error: (err) => {
+          if(err?.status === 401 || err?.status === 403){
+            this.subscribed = false;
+            return;
+          }
+          this.toggleError = "Could not load notification status.";
+        },
+      });
+
+  }
+
+  onToggleNotifications(): void {
+    if(!this.isLoggedIn || this.toggleLoading) {
+        return;
+    }
+
+    this.toggleLoading = true;
+    this.toggleError = null;
+
+    const call = this.subscribed
+      ? this.notificationService.unsubscribe(this.trackingNumber, this.postalCode)
+      : this.notificationService.subscribe(this.trackingNumber, this.postalCode);
+
+    call.subscribe({
+      next: (result) => {
+        this.subscribed = !!result?.subscribed;
+        this.toggleLoading  = false;
+      },
+      error: (err) => {
+        this.toggleLoading = false;
+        this.toggleError = err?.status === 404 ? "No package found." : "Loading error";
+      },
+    });
+  }
+
   get currentStatus(): string {
     if(!this.data?.history?.length){
       return "-";
