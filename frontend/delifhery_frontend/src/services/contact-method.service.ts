@@ -6,7 +6,7 @@ import {Router} from '@angular/router';
 
 export interface ContactMethod{
   contactId : number,
-  customerId: number,
+  customerId: string,
   type: string,
   value: string,
   isPrimary: boolean,
@@ -36,5 +36,15 @@ export class ContactMethodService {
   deleteContact(contactId: number): Observable<void> {
     return this.http.delete<void>(`${this.Url}/${contactId}`)
       .pipe(catchError(this.errorHandler));
+  }
+
+  setPrimary(contactId: number): Observable<boolean> {
+    return this.http.put<void>(`${this.Url}/${contactId}/primary`,{}).pipe(
+      map(() => true),
+      catchError(err => {
+        this.errorHandler(err);
+        return of(false);
+      })
+    );
   }
 }

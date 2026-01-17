@@ -130,4 +130,5 @@ export class TrackingDetails implements OnInit{
     const last = this.data.history[this.data.history.length - 1].occurredAt;
     return last ? new Intl.DateTimeFormat("de-At",{ dateStyle: 'medium', timeStyle: 'short' }).format(last) : "-";
   }
+
 }

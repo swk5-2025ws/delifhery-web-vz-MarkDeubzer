@@ -35,10 +35,16 @@ export class MyContact {
     );
   }
 
-
   makePrimary(contact: ContactMethod) {
-    // TODO: API-Call zum Backend, um diesen Contact als primary zu setzen
-    console.log('Set primary:', contact);
+    if(contact.isPrimary) {
+      return;
+    }
+    this.contactMethodeService.setPrimary(contact.contactId).subscribe(ok => {
+      if (ok) {
+        this.contactMethods$ = this.contactMethodeService.getForCurrentUser();
+        this.searchContacts();
+      }
+    });
   }
 
   deleteContact(contact: ContactMethod) {
@@ -73,7 +79,5 @@ export class MyContact {
       }
     });
   }
-
-  protected readonly filter = filter;
 }
 

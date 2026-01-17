@@ -29,6 +29,12 @@ export interface ShipmentRequest{
   WeightKg: number;
 }
 
+export interface MyShipmentListDto {
+  trackingNumber: string;
+  postalCode: string;
+  currentStatus: string;
+}
+
 @Injectable({providedIn: 'root'})
 export class ShipmentService {
   private readonly Url = environment.apiBaseUrl;
@@ -36,5 +42,9 @@ export class ShipmentService {
 
   createShipment(request: ShipmentRequest): Observable<ShipmentResponse> {
     return this.http.post<ShipmentResponse>(`${this.Url}/api/shipments`, request);
+  }
+
+  getMyShipments(): Observable<MyShipmentListDto[]>{
+    return this.http.get<MyShipmentListDto[]>(`${this.Url}/api/shipments/myShipments`);
   }
 }

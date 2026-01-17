@@ -1,0 +1,54 @@
+<div class="page">
+  <div class="head">
+    <div class="title">
+      My Shipments
+    </div>
+  </div>
+
+  @if(loading){
+    <div class="state state_loading">
+      <span class="spinner"></span>
+      <div>
+        <div class="state_title">Loading...</div>
+      </div>
+    </div>
+  } @else if (error){
+    <div class="state state_error">
+      <div>
+        <div class="state_title">
+          Could not load shipments
+        </div>
+        <div class="state_text">
+          {{error}}
+        </div>
+      </div>
+    </div>
+  } @else if(!shipments.length){
+    <div class="state">
+      <div>
+        <div class="state_title">
+          No shipments yet.
+        </div>
+      </div>
+    </div>
+  } @else {
+    <div class="list">
+        @for(shipment of shipments; track shipment.trackingNumber){
+          <div class="item">
+            <div class="left">
+              <div class="tn"> Tracking number</div>
+              <div class="value mono"> {{shipment.trackingNumber}}</div>
+
+              <div class="status mt">Current status</div>
+              <div class="value">{{displayStatus(shipment)}}</div>
+            </div>
+
+            <div class="right">
+              <button class="button btn-primary" (click)="track(shipment)">Track</button>
+            </div>
+          </div>
+        }
+    </div>
+  }
+
+</div>

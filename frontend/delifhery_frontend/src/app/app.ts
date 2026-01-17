@@ -16,5 +16,4 @@ import {CreateShipment} from './create-shipment/create-shipment';
   styleUrl: './app.css'
 })
 export class App {
-  protected readonly title = signal('delifhery_frontend');
 }

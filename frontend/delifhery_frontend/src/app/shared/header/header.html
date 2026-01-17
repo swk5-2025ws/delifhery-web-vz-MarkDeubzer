@@ -17,6 +17,23 @@
     <a routerLink="tracking" routerLinkActive="active" class="item font_family">Tracking</a>
     @if(isLoggedIn){
       <a routerLink="myContacts" routerLinkActive="active" class="item font_family">My Contacts</a>
+      <div class="nav_menu">
+        <button
+          type = "button"
+          class="menu_button"
+          (click)="toggleMenu($event)"
+          aria-label="Open menu"
+          [attr.aria-expanded]="menuOpen">
+          <img ngSrc="/icons/down.svg" width="16" height="16" alt="Down Icon">
+        </button>
+        @if(menuOpen){
+          <div class="menu" role="menu">
+            <a role="menuitem" class="menu_item" routerLink="my-shipments" (click)="menuOpen=false">
+              My Shipments
+            </a>
+          </div>
+        }
+      </div>
     }
   </div>
   <div class="login_button_container">

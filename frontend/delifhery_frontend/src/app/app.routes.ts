@@ -6,6 +6,7 @@ import {ShippingCost} from './shipping-cost/shipping-cost';
 import {MyContact} from './my-contact/my-contact';
 import {CreateShipment} from './create-shipment/create-shipment';
 import {PaymentComplete} from './payment-complete/payment-complete';
+import {MyShipments} from './my-shipments/my-shipments';
 
 export const routes: Routes = [
   {
@@ -40,6 +41,10 @@ export const routes: Routes = [
   {
     path: 'payment-complete',
     loadComponent: () => import('./payment-complete/payment-complete'). then(m => m.PaymentComplete),
+  },
+  {
+    path: 'my-shipments',
+    component: MyShipments
   },
   {
     path:'**',
