@@ -84,14 +84,6 @@ export class CreateShipment {
     });
   }
 
-  onReset(): void {
-    this.form.reset({
-      saveSenderAsDefault: false,
-    });
-    this.result = null;
-    this.errorMessage = null;
-  }
-
   goToPayment(): void {
     if (this.result?.paymentUrl) {
       window.location.href = this.result.paymentUrl;

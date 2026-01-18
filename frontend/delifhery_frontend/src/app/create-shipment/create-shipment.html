@@ -1,6 +1,7 @@
 <div class="send-wrapper">
   <form class="send-container" [formGroup]="form" (ngSubmit)="onSubmit()">
     <h1 class="send-title">Create Shipment & Print Shipping Label</h1>
+    <p class="text3 subtle">Fill in all required fields (*) to calculate an estimate.</p>
     <p class="send-subtitle">
       Enter your shipment details to calculate the price and instantly receive
       a tracking number and a ready-to-print shipping label.
@@ -29,7 +30,7 @@
             [class.send-input--error]="isInvalid('senderStreet')"
             type="text"
             formControlName="senderStreet"
-            placeholder="e.g. Margit utca 15"
+            placeholder="e.g. Margit Street 15"
           />
         </div>
 
@@ -69,7 +70,7 @@
             [class.send-input--error]="isInvalid('recipientName')"
             type="text"
             formControlName="recipientName"
-            placeholder="e.g. John Doe"
+            placeholder="e.g. Anna Schmidt"
           />
         </div>
 
@@ -80,7 +81,7 @@
             [class.send-input--error]="isInvalid('recipientStreet')"
             type="text"
             formControlName="recipientStreet"
-            placeholder="e.g. Muhar utca 28"
+            placeholder="e.g. Mariahilfer Street 23"
           />
         </div>
 
@@ -91,7 +92,7 @@
             [class.send-input--error]="isInvalid('recipientPostalCode')"
             type="text"
             formControlName="recipientPostalCode"
-            placeholder="e.g. 1028"
+            placeholder="e.g. 1060"
           />
         </div>
 
@@ -102,7 +103,7 @@
             [class.send-input--error]="isInvalid('recipientCity')"
             type="text"
             formControlName="recipientCity"
-            placeholder="e.g. Budapest"
+            placeholder="e.g. Vienna"
           />
         </div>
       </div>
@@ -175,7 +176,6 @@
         {{ errorMessage }}
       </div>
     }
-
     <!-- Ergebnis -->
     @if (result) {
       <section class="send-result">
@@ -214,14 +214,6 @@
         } @else {
           Calculating…
         }
-      </button>
-
-      <button
-        type="button"
-        class="send-button send-button--secondary"
-        (click)="onReset()"
-      >
-        Reset Form
       </button>
 
       @if (result?.paymentUrl) {
