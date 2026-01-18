@@ -71,3 +71,13 @@
   bottom: 1rem;
   color: #db4c3d;
 }
+
+.track_input.input_invalid{
+  border: 1px solid red;
+}
+
+.error{
+  font-family: Inter, sans-serif;
+  font-size: 0.85rem;
+  color: #db4c3d;
+}

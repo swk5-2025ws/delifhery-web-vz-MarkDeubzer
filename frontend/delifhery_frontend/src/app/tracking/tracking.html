@@ -2,8 +2,8 @@
 <div class="track_container">
   <a class="text">Track Your Shipment</a>
   <div class="tracK_bg_container">
-    <input type="text" class="track_input" placeholder="Tracking number..." [(ngModel)]="trackingNumber">
-    <input type="text" class="track_input" placeholder="Postal code..." [(ngModel)]="postalCode">
+    <input type="text" class="track_input" placeholder="Tracking number..." [(ngModel)]="trackingNumber" [class.input_invalid] ="submitted && !trackingNumber.trim()">
+    <input type="text" class="track_input" placeholder="Postal code..." [(ngModel)]="postalCode" [class.input_invalid] ="submitted && !postalCode.trim()">
     <button class="track_button" (click)="OnTrack()" [disabled]="loading">{{ loading ? 'Loading...' : 'Track' }}</button>
   </div>
   @if(error){

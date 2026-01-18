@@ -17,6 +17,7 @@ export class Tracking {
 
   loading = false;
   error : string | null = null;
+  submitted = false;
 
   data: TrackingStatusResponse | null = null;
 
@@ -25,6 +26,7 @@ export class Tracking {
   OnTrack(): void {
     this.error = null;
     this.data = null;
+    this.submitted = true;
 
     const tn = this.trackingNumber.trim();
     const pc = this.postalCode.trim();
@@ -39,12 +41,13 @@ export class Tracking {
     this.trackingService.trackShipment({trackingNumber: tn, postalCode: pc}).subscribe({
       next: () => {
         this.loading = false;
-        this.router.navigate(['/tracking',pc], {queryParams: { tn }});
+        if(this.error == null){
+          this.router.navigate(['/tracking',pc], {queryParams: { tn }});
+        }
       },
       error: (err) => {
         this.loading = false;
         this.error = err?.status === 404 ? "No package found" : "Loading error. Try again.";
-
       },
     });
   }

@@ -1,9 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {TrackingService, TrackingStatusResponse} from '../../services/tracking.service';
 import {CommonModule} from '@angular/common';
-import {ActivatedRoute, RouterLink} from '@angular/router';
+import {ActivatedRoute, RouterLink, Router} from '@angular/router';
 import {KeycloakService} from 'keycloak-angular';
 import {NotificationService} from '../../services/notification.service';
+import { ContactMethodService } from '../../services/contact-method.service';
 
 @Component({
   selector: 'app-tracking-details',
@@ -26,8 +27,13 @@ export class TrackingDetails implements OnInit{
   toggleLoading: boolean = false;
   toggleError: string | null = null;
 
+  hasPrimaryEmail = false;
+  primaryEmail: string | null = null;
+  emailLoading = false;
+
   constructor(private trackingService: TrackingService, private route: ActivatedRoute
-  , private keycloak: KeycloakService, private notificationService: NotificationService) {
+  , private keycloak: KeycloakService, private notificationService: NotificationService, private contactMethodService: ContactMethodService,
+              private router: Router) {
   }
 
   async ngOnInit() {
@@ -40,7 +46,27 @@ export class TrackingDetails implements OnInit{
     }
     this.isLoggedIn = this.keycloak.isLoggedIn();
 
+    if(this.isLoggedIn){
+      this.checkPrimaryEmail();
+    }
     this.load();
+  }
+
+  private checkPrimaryEmail() {
+    this.emailLoading = true;
+
+    this.contactMethodService.getPrimaryEmailForCurrentUser().subscribe({
+      next: (email) => {
+        this.primaryEmail = email;
+        this.hasPrimaryEmail = !!email;
+        this.emailLoading = false;
+      },
+      error: () => {
+        this.primaryEmail = null;
+        this.hasPrimaryEmail = false;
+        this.emailLoading = false;
+      }
+    })
   }
 
   load(): void {
@@ -70,6 +96,14 @@ export class TrackingDetails implements OnInit{
   }
 
   private loadSubscriptionStatus(): void{
+
+    if(!this.hasPrimaryEmail){
+      this.subscribed = false;
+      this.toggleLoading = false;
+      this.toggleError = "Please set a primary email in My Contacts to enable notifications.";
+      return;
+    }
+
     this.toggleError = null;
     this.toggleLoading = true;
     this.toggleError = null;
@@ -95,6 +129,10 @@ export class TrackingDetails implements OnInit{
   onToggleNotifications(): void {
     if(!this.isLoggedIn || this.toggleLoading) {
         return;
+    }
+
+    if(!this.hasPrimaryEmail) {
+      this.toggleError = "Please set a primary email in My Contacts to enable notifications."
     }
 
     this.toggleLoading = true;

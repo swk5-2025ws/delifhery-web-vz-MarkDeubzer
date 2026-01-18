@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {environment} from '../environments/environment';
 import {HttpClient} from '@angular/common/http';
-import {catchError, map, Observable, of} from 'rxjs';
+import {catchError, map, Observable, of, throwError} from 'rxjs';
 
 export interface TrackingStatusRequest {
   trackingNumber: string;
@@ -40,7 +40,10 @@ export class TrackingService {
     return this.http.get<TrackingStatusResponse>(`${this.url}/api/tracking/${pc}/${tn}`)
       .pipe(map (r =>({
         ...r,
-        history: r.history.map(e => ({...e, occurredAt: new Date(e.occurredAt as any)}))
-      }))).pipe( catchError(err => this.errorHandler(err)));
+        history: r.history.map(e => ({...e, occurredAt: new Date(e.occurredAt as any)})),
+
+      })),
+        catchError(err => throwError(() => err))
+      );
   }
 }

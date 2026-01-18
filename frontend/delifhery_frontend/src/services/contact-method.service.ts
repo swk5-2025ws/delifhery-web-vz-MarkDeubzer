@@ -25,8 +25,24 @@ export class ContactMethodService {
 
   getForCurrentUser(): Observable<ContactMethod[]> {
     return this.http.get<ContactMethod[]>(this.Url)
-      .pipe(catchError(this.errorHandler));
+      .pipe(catchError(() => of([])));
   }
+
+  getPrimaryEmailForCurrentUser(): Observable<string | null> {
+    return this.getForCurrentUser().pipe(
+      map((methods) => {
+        const primaryEmail = methods.find(
+          (m) => m.isPrimary && this.isEmailType(m.type) && !!m.value.trim()
+        );
+        return primaryEmail?.value?.trim() ?? null;
+      })
+    );
+  }
+
+  private isEmailType(type: string): boolean{
+    return type === "email"
+  }
+
 
   createContactMethod(contact: Partial<ContactMethod>): Observable<ContactMethod> {
     return this.http.post<ContactMethod>(this.Url, contact)

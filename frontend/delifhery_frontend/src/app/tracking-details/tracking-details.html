@@ -100,7 +100,7 @@
               <input
                 type="checkbox"
                 [checked]="subscribed"
-                [disabled]="!isLoggedIn || toggleLoading"
+                [disabled]="!isLoggedIn || toggleLoading || emailLoading || !hasPrimaryEmail"
                 (change)="onToggleNotifications()"
               />
               <span class="switch-slider"></span>
