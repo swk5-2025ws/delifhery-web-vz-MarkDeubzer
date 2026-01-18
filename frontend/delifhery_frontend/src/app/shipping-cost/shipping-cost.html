@@ -6,6 +6,7 @@
   >
     <div class="shipping_cost_container">
       <h2 class="text1">Calculate Shipping Costs</h2>
+      <p class="text3 subtle">Fill in all required fields (*) to calculate an estimate.</p>
       <div class="shipping_cost_info_container">
         <div class="shipping_cost_info">
           <div class="text2">Sender</div>
@@ -26,7 +27,7 @@
               <input
                 id="senderStreet"
                 class="shipping_input"
-                placeholder="e.g. Margit utca 15"
+                placeholder="e.g. Margit Street 15"
                 formControlName="senderStreet"
               />
             </div>
@@ -70,7 +71,7 @@
               <input
                 id="recipientName"
                 class="shipping_input"
-                placeholder="e.g. John Doe"
+                placeholder="e.g. Anna Schmidt"
                 formControlName="recipientName"
               />
             </div>
@@ -80,7 +81,7 @@
               <input
                 id="recipientStreet"
                 class="shipping_input"
-                placeholder="e.g. Muhar utca 28"
+                placeholder="e.g. Mariahilfer Street 23"
                 formControlName="recipientStreet"
               />
             </div>
@@ -91,7 +92,7 @@
                 <input
                   id="recipientPostalCode"
                   class="shipping_input"
-                  placeholder="e.g. 1028"
+                  placeholder="e.g. 1060"
                   formControlName="recipientPostalCode"
                 />
               </div>
@@ -101,7 +102,7 @@
                 <input
                   id="recipientCity"
                   class="shipping_input"
-                  placeholder="e.g. Budapest"
+                  placeholder="e.g. Vienna"
                   formControlName="recipientCity"
                 />
               </div>
@@ -129,7 +130,7 @@
               formControlName="lengthCm"
             />
             @if (isInvalid("lengthCm")) {
-              <div class="field-error">Length must be at least 1 cm.</div>
+              <div class="field-error">Length must be at least 4 cm.</div>
             }
           </div>
 
@@ -142,7 +143,7 @@
               formControlName="widthCm"
             />
             @if (isInvalid("widthCm")) {
-              <div class="field-error">Width must be at least 1 cm.</div>
+              <div class="field-error">Width must be at least 4 cm.</div>
             }
           </div>
 
@@ -155,7 +156,7 @@
               formControlName="heightCm"
             />
             @if (isInvalid("heightCm")) {
-              <div class="field-error">Height must be at least 1 cm.</div>
+              <div class="field-error">Height must be at least 4 cm.</div>
             }
           </div>
 
@@ -173,7 +174,7 @@
           </div>
         </div>
 
-        <div class="shipping_cost_button">
+        <div class="shipping_cost_button" [class.push_down] ="!!result">
           <button
             class="shipping_button"
             type="submit"

@@ -143,6 +143,11 @@ form.shipping_cost_wrapper {
   row-gap: 0.75rem;
 }
 
+.shipping_cost_button.push_down{
+  position: relative;
+  top: 12rem;
+}
+
 .width,
 .height,
 .weight {

@@ -28,9 +28,9 @@ export class ShippingCost {
       recipientCity: ['', Validators.required],
       recipientStreet: ['', Validators.required],
 
-      widthCm: [null as number | null, [Validators.required, Validators.min(1)]],
-      heightCm: [null as number | null, [Validators.required, Validators.min(1)]],
-      lengthCm: [null as number | null, [Validators.required, Validators.min(1)]],
+      widthCm: [null as number | null, [Validators.required, Validators.min(4)]],
+      heightCm: [null as number | null, [Validators.required, Validators.min(4)]],
+      lengthCm: [null as number | null, [Validators.required, Validators.min(4)]],
       weightKg: [null as number | null, [Validators.required, Validators.min(0.1)]],
     });
   }
