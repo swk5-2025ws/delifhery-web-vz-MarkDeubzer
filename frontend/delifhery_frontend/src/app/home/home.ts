@@ -17,17 +17,20 @@ export class Home {
 
     loading = false;
     error:string | null = null;
+    submitted = false;
 
     constructor(private trackingService: TrackingService, private router: Router) {}
 
     OnTrack(): void{
       this.error = null;
+      this.submitted = true;
 
       const tn = this.trackingNumber.trim();
       const pc = this.postalCode.trim();
 
       if(!tn || !pc){
         this.error = "Please enter a Postal code and Tracking number.";
+        return;
       }
 
       this.loading = true;
@@ -35,7 +38,9 @@ export class Home {
       this.trackingService.trackShipment({trackingNumber: tn, postalCode: pc}).subscribe({
         next: () => {
           this.loading = false;
-          this.router.navigate(['/tracking',pc], {queryParams: { tn }});
+          if(this.error == null){
+            this.router.navigate(['/tracking',pc], {queryParams: { tn }});
+          }
         },
         error: (err) => {
           this.loading = false;

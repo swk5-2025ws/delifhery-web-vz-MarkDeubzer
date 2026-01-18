@@ -142,6 +142,10 @@
 .track_input:focus{
   outline:none;
 }
+
+.track_input.input_invalid{
+  border: 2px solid red;
+}
 .text{
   font-family: Inter, sans-serif;
   font-size: 2rem;
@@ -150,4 +154,11 @@
 
   position: relative;
   bottom: 1rem;
+}
+
+.error{
+  font-family: Inter, sans-serif;
+  font-size: 0.85rem;
+  color: #db4c3d;
+  font-weight: bold;
 }
