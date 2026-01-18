@@ -154,19 +154,27 @@ export class TrackingDetails implements OnInit{
     });
   }
 
+  private get latestEvent() {
+    const h = this.data?.history ?? [];
+    if (!h.length) return null;
+
+    return h.reduce((latest, cur) => {
+      const lt = new Date(latest.occurredAt as any).getTime();
+      const ct = new Date(cur.occurredAt as any).getTime();
+      return ct > lt ? cur : latest;
+    });
+  }
+
   get currentStatus(): string {
-    if(!this.data?.history?.length){
-      return "-";
-    }
-    return this.data.history[this.data.history.length - 1].status ?? "-";
+    return this.latestEvent?.status ?? "-";
   }
 
   get lastUpdate(): string {
-    if(!this.data?.history?.length){
-      return "-";
-    }
-    const last = this.data.history[this.data.history.length - 1].occurredAt;
-    return last ? new Intl.DateTimeFormat("de-At",{ dateStyle: 'medium', timeStyle: 'short' }).format(last) : "-";
+    const ev = this.latestEvent;
+    if (!ev?.occurredAt) return "-";
+    return new Intl.DateTimeFormat("de-AT", { dateStyle: "medium", timeStyle: "short" })
+      .format(new Date(ev.occurredAt as any));
   }
+
 
 }

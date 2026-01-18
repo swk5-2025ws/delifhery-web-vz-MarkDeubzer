@@ -159,6 +159,6 @@
 .error{
   font-family: Inter, sans-serif;
   font-size: 0.85rem;
-  color: #db4c3d;
+  color: red;
   font-weight: bold;
 }
