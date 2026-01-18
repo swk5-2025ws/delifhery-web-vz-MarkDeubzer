@@ -20,8 +20,29 @@ export class MyContact {
   isPrimary: boolean = false;
   searchText : string = "";
 
+  submitted = false;
+
   contactMethods$ = this.contactMethodeService.getForCurrentUser();
   filterContacts = this.contactMethods$;
+
+  private normalize(value: string){
+    return (value ?? '').trim();
+  }
+
+  isValidEmail(value: string){
+    const x = this.normalize(value);
+    if(!x) return false;
+    return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(x);
+  }
+
+  isValidPhone(value: string){
+    const x = this.normalize(value);
+    if(!x) return false;
+
+    const allowed = /^[+]?[\d\s\-()\/]{7,}$/.test(x);
+    const digits = (x.match(/\d/g) ?? []).length;
+    return allowed && digits >= 7 && digits <= 15;
+  }
 
   searchContacts() {
     const text = this.searchText.toLowerCase();
@@ -61,6 +82,14 @@ export class MyContact {
   }
 
   saveContact(){
+
+    this.submitted = true;
+    const value = this.value.trim();
+    const valid = (this.selectedType === "email" && this.isValidEmail(value)) || (this.selectedType === "phone" && this.isValidPhone(value));
+    if(!valid){
+      return;
+    }
+
     const newContact = {
       type: this.selectedType,
       value: this.value,
@@ -75,6 +104,7 @@ export class MyContact {
           this.value = "";
           this.label = "";
           this.isPrimary = false;
+          this.submitted = false;
         }
       }
     });

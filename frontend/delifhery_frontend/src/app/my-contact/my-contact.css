@@ -247,5 +247,15 @@
   padding-left: 0.5rem;
 }
 
+.email_input.input_invalid{
+  border: 1px solid #db4c3d;
+}
+
+.field_error{
+  margin-top: 6px;
+  font-size: 0.9rem;
+  color: #db4c3d;
+}
+
 
 

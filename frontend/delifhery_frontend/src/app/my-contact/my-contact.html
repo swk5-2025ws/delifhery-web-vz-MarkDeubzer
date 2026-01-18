@@ -101,12 +101,22 @@
     </ng-container>
     <ng-template #emailTemplate >
       <div class="input_fields_email">
-        <input type="text" class="email_input" placeholder="Email address" [(ngModel)]="value">
+        <input type="text" class="email_input" placeholder="Email address" name="EmailValue" [(ngModel)]="value" required
+               [class.input_invalid]="submitted && selectedType === 'email' && !isValidEmail(value)">
+
+        @if (submitted && selectedType === 'email' && !isValidEmail(value)) {
+          <div class="field_error">Please enter a valid email address.</div>
+        }
       </div>
     </ng-template>
     <ng-template #phoneTemplate>
       <div class="input_fields_email">
-        <input type="text" class="email_input" placeholder="Phone number" [(ngModel)]="value">
+        <input type="text" class="email_input" placeholder="Phone number" name="PhoneValue" [(ngModel)]="value" required
+                [class.input_invalid]="submitted && selectedType === 'phone' && !isValidPhone(value)">
+
+        @if (submitted && selectedType === 'phone' && !isValidPhone(value)) {
+          <div class="field_error">Please enter a valid phone number.</div>
+        }
       </div>
     </ng-template>
     <div class="button_container">
